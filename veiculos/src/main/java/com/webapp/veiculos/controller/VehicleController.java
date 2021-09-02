@@ -17,6 +17,7 @@ public class VehicleController {
     @Autowired
     private VehicleService vehicleService;
 
+    //teste
     @PostMapping
     public ResponseEntity<Vehicle> createVehicle(@RequestBody Vehicle vehicle){
         Vehicle response = vehicleService.saveVehicle(vehicle);
