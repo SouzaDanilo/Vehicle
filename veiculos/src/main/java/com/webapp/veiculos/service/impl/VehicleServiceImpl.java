@@ -1,5 +1,6 @@
 package com.webapp.veiculos.service.impl;
 
+import com.webapp.veiculos.exception.ObjectNotFoundException;
 import com.webapp.veiculos.model.Vehicle;
 import com.webapp.veiculos.repository.VehicleRepository;
 import com.webapp.veiculos.service.VehicleService;
@@ -23,14 +24,14 @@ public class VehicleServiceImpl implements VehicleService {
     public Vehicle saveVehicle(Vehicle vehicle){
 
         if(vehicle.getId() != null && vehicleRepository.findVehicle(vehicle.getId()) == null){
-            throw new EntityNotFoundException("Vehicle is not registered");
+            throw new ObjectNotFoundException("Vehicle is not registered");
         }
         return vehicleRepository.save(vehicle);
     }
 
     @Override
     public Vehicle getVehicle(Long id) {
-        Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Vehicle is not registered"));
+        Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Vehicle is not registered"));
         return vehicle;
     }
 

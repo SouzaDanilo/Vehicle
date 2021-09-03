@@ -5,8 +5,10 @@ import com.webapp.veiculos.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,15 +19,14 @@ public class VehicleController {
     @Autowired
     private VehicleService vehicleService;
 
-    //teste
     @PostMapping
-    public ResponseEntity<Vehicle> createVehicle(@RequestBody Vehicle vehicle){
+    public ResponseEntity<Vehicle> createVehicle(@Valid  @RequestBody Vehicle vehicle){
         Vehicle response = vehicleService.saveVehicle(vehicle);
         return ResponseEntity.ok().body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Vehicle> updateVehicle(@RequestBody Vehicle vehicle,@PathVariable Long id){
+    public ResponseEntity<Vehicle> updateVehicle(@RequestBody @Valid Vehicle vehicle,@PathVariable Long id){
         Vehicle response = vehicleService.saveVehicle(vehicle);
         return ResponseEntity.ok().body(response);
     }

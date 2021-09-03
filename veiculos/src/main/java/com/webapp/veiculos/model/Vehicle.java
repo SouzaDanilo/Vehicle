@@ -1,6 +1,7 @@
 package com.webapp.veiculos.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -14,16 +15,20 @@ public class Vehicle implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "brand", nullable = false)
+    @Column(name = "brand")
+    @NotNull(message = "brand is a mandatory field")
     private String brand;
 
-    @Column(name = "car",nullable = false)
+    @Column(name = "car")
+    @NotNull(message = "car is a mandatory field")
     private String car;
 
-    @Column(name = "installments", nullable = false)
+    @Column(name = "installments")
+    @NotNull(message = "installments is a mandatory field")
     private Integer installments;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price")
+    @NotNull(message = "price is mandatory field")
     private Integer price;
 
     public Long getId() {
