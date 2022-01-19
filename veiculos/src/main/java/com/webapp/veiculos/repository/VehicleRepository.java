@@ -1,6 +1,6 @@
 package com.webapp.veiculos.repository;
 
-import com.webapp.veiculos.model.Vehicle;
+import com.webapp.veiculos.data.model.Vehicle;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
