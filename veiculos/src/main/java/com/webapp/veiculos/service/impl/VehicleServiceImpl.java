@@ -1,6 +1,9 @@
 package com.webapp.veiculos.service.impl;
 
-import com.webapp.veiculos.model.Vehicle;
+import com.webapp.veiculos.converter.DozerConverter;
+import com.webapp.veiculos.data.vo.VehicleVO;
+import com.webapp.veiculos.exception.ObjectNotFoundException;
+import com.webapp.veiculos.data.model.Vehicle;
 import com.webapp.veiculos.repository.VehicleRepository;
 import com.webapp.veiculos.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,22 +22,25 @@ public class VehicleServiceImpl implements VehicleService {
     private VehicleRepository vehicleRepository;
 
     @Transactional
-    public Vehicle saveVehicle(Vehicle vehicle){
+    public VehicleVO saveVehicle(VehicleVO vehicleVO){
 
-        if(vehicle.getId() != null && vehicleRepository.findVehicle(vehicle.getId()) == null){
-            throw new EntityNotFoundException("Vehicle is not registered");
+        if(vehicleVO.getId() != null && vehicleRepository.findVehicle(vehicleVO.getId()) == null){
+            throw new ObjectNotFoundException("Vehicle is not registered");
         }
-        return vehicleRepository.save(vehicle);
+
+        var entity = DozerConverter.parseObject(vehicleVO,Vehicle.class);
+        var vo = DozerConverter.parseObject(vehicleRepository.save(entity), VehicleVO.class);
+        return vo;
     }
 
     @Override
-    public Vehicle getVehicle(Long id) {
-        Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Vehicle is not registered"));
-        return vehicle;
+    public VehicleVO getVehicle(Long id) {
+        var entity = vehicleRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Vehicle is not registered"));
+        return DozerConverter.parseObject(entity,VehicleVO.class);
     }
 
     @Override
-    public List<Vehicle> findAllByFilter(String brand, String car) {
+    public List<VehicleVO> findAllByFilter(String brand, String car) {
 
         final List <Specification<Vehicle>> specifications = new ArrayList<>();
 
@@ -56,13 +61,12 @@ public class VehicleServiceImpl implements VehicleService {
                 completeQuery = Specification.where(completeQuery).and(specification);
             }
         }
-
-        return vehicleRepository.findAll(completeQuery);
+        return  DozerConverter.parseListObjects(vehicleRepository.findAll(completeQuery),VehicleVO.class);
     }
 
     @Override
-    public List<Vehicle> findAll() {
-        return vehicleRepository.findAll();
+    public List<VehicleVO> findAll() {
+        return DozerConverter.parseListObjects(vehicleRepository.findAll(),VehicleVO.class);
     }
 
     @Override
